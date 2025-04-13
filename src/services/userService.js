@@ -17,6 +17,22 @@ const connection = mysql.createPool({
 
 ///
 const getListUsers = async () => {
+  /// Test relationships
+  let newUser = await db.User.findOne({
+    where: { id: 1 },
+    include: [
+      {
+        model: db.Group,
+        include: [
+          { model: db.Role, through: { attributes: [] } }, // Bao gồm Role thông qua GroupRole
+        ],
+      },
+    ],
+    raw: true,
+    nest: true,
+  });
+  console.log("Check row-->>>", newUser);
+
   let users = [];
   users = await db.User.findAll();
   return users;
